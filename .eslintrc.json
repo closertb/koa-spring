@@ -1,0 +1,17 @@
+{
+    "parser":  "@typescript-eslint/parser", //定义ESLint的解析器
+    "plugins": ["@typescript-eslint"],
+    "extends": ["plugin:@typescript-eslint/recommended"],
+    // "extends": ["eslint-config-hcb"],
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "rules": {
+        "max-len": ["error", { "code": 150 }],
+        "arrow-body-style": ["error", "as-needed"],
+        "lines-between-class-members": "off"
+    },
+    "env": {
+        "node": true
+    }
+}
