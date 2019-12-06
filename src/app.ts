@@ -1,8 +1,9 @@
 import "reflect-metadata";
-import {createKoaServer, useContainer} from "routing-controllers";
-import {Container} from "typedi";
-import {CategoryController} from "./controllers/CategoryController";
-import {PostController} from "./controllers/PostController";
+import { createKoaServer, useContainer } from "routing-controllers";
+import { Container } from "typedi";
+import { RuleController } from "./controllers/RuleController";
+import sequelize from './config/db';
+import Rule from './model/Rule';
 
 /**
  * Setup routing-controllers to use typedi container.
@@ -19,11 +20,11 @@ const koaApp = createKoaServer({
      * Here we specify what controllers should be registered in our express server.
      */
     controllers: [
-        CategoryController,
-        PostController
+        RuleController
     ]
 });
 
+sequelize.addModels([Rule]);
 /**
  * Start the koa app.
  */

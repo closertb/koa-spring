@@ -16,3 +16,10 @@
 
 This project targets ES6. 
 You can target ES5, but you'll need to use es6-shim and install its typings.
+
+relates docs
+
+https://sequelize.org/master/manual/models-definition.html
+
+https://github.com/RobinBuschmann/sequelize-typescript#table-api
+
