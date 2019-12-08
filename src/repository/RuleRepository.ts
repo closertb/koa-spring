@@ -10,7 +10,7 @@ export default class RuleRepository {
       // here, for example you can load categories using mongoose
       // you can also return a promise here
       // simulate async with creating an empty promise
-      return Rule.findAll({
+      return this.rule.findAll({
         where: {
           is_delete: 0
         }
@@ -20,7 +20,7 @@ export default class RuleRepository {
   findOne(id: number) {
       // here, for example you can load category id using mongoose
       // you can also return a promise here
-      return Rule.findAll({
+      return this.rule.findOne({
         where: {
           id
         }
@@ -29,12 +29,12 @@ export default class RuleRepository {
 
   save(rule: Rule) {
       // here, for example you can save a category to mongodb using mongoose
-      return Rule.create(rule);
+      return rule.save();
   }
 
   update(id: number) {
     // here, for example you can save a category to mongodb using mongoose
-    return Rule.update({
+    return this.rule.update({
       "is_delete": 1,
     }, {
       where: {
