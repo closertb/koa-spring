@@ -38,9 +38,9 @@ sequelize.addModels([Rule]);
  */
 // koaApp.use(cors());
 koaApp.on('error', (err: any, ctx: any) => {
-    console.log('err', err, ctx);
+    // console.log('err', err, ctx);
     const { errors, message } = err;
-    ctx.code = 400;
+    ctx.status = 400;
     ctx.body = {
         errors,
         message

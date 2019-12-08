@@ -30,7 +30,14 @@ export default class ErrorHandleInterceptor implements KoaMiddlewareInterface {
       } catch (error) {
           const { errors, message } = error;
           console.log('error', errors, message);
-          // throw new BadError('请求错误', errors);
+          ctx.status = 400;
+          ctx.body = {
+              errors,
+              message,
+              status: 'fail',
+              code: 1001
+          }
+          // throw error;
       }
       // console.log("ResponseMiddleWare after execution");
     }
