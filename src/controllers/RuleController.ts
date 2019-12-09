@@ -1,4 +1,4 @@
-import { JsonController, Get, Post, Param, Delete, Body, UseAfter } from "routing-controllers";
+import { JsonController, Get, Post, Param, Authorized, Body, UseAfter } from "routing-controllers";
 import { Service } from "typedi";
 import PaginationMiddleWare from '../middlewares/PaginationMiddleWare';
 import RuleRepository from "../repository/RuleRepository";

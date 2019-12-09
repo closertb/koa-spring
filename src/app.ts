@@ -1,10 +1,11 @@
 import "reflect-metadata";
-import { createKoaServer, useContainer } from "routing-controllers";
+import { createKoaServer, useContainer, Action } from "routing-controllers";
 import { Container } from "typedi";
 import { RuleController, UserController } from "./controllers";
-import { ResponseMiddleWare, LogMiddleWare, ErrorHandleInterceptor } from "./middlewares";
+import { ResponseMiddleWare, LogMiddleWare, AuthCheckMiddleWare, ErrorHandleInterceptor } from "./middlewares";
 import sequelize from './config/db';
 import Rule from './model/Rule';
+import { CLIENT_RENEG_LIMIT } from "tls";
 
 
 /**
@@ -28,7 +29,7 @@ const koaApp = createKoaServer({
     ],
     validation: true,
     defaultErrorHandler: false,
-    middlewares: [ResponseMiddleWare, ErrorHandleInterceptor],
+    middlewares: [ResponseMiddleWare, AuthCheckMiddleWare, ErrorHandleInterceptor],
     // interceptors: []
 });
 
@@ -43,7 +44,7 @@ koaApp.on('error', (err: any, ctx: any) => {
     ctx.status = 400;
     ctx.body = {
         errors,
-        message
+        message: '请求错误'
     }
 });
 koaApp.listen(3000);

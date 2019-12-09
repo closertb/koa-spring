@@ -1,10 +1,57 @@
 import { JsonController, Get, Post, Body, UseAfter } from "routing-controllers";
+import * as request from 'request-promise';
+import * as cache from 'memory-cache';
 import User from "../model/User";
+import servers from '../config/servers';
+import { ExpiredTime } from '../config/constants';
+
+const ssoUrl = servers['dev'].sso;
 
 @JsonController('/user')
 export default class UserController {
 
     @Post("/login")
+    async login(@Body({ validate: true }) user: User) {
+      let res;
+      try {
+        res = await request({
+          uri: `${ssoUrl}/common/web/login.do`,
+          method: 'POST',
+          form: {
+            domainId: 1,
+            appClientId: 279,
+            ...user
+          }
+        });
+
+        res = typeof res === 'string' ? JSON.parse(res) : res;
+        // console.log('res status', res.status);
+        if (res.status === "OK") {
+          res = res.content;
+          const { id } = res;
+          cache.put(id, res, ExpiredTime);
+        } else {
+          console.log('res status', res);
+          const { errorMsg, errorCode } = res;
+          res = {
+            status: 'fail',
+            message: errorMsg,
+            code: errorCode
+          }
+        }
+        console.log('res', res, user);
+      } catch (error) {
+        console.log('res', error);
+        res = {
+          error,
+          message: '网络错误',
+          code: '10013'
+        }
+      } finally {
+        return res;
+      }
+    }
+    @Post("/logout")
     async update(@Body({ validate: true }) user: User) {
       console.log(user)
       return { token: 'drgfsdfgfegfgfgevfdd', id: 12345, name: 'denzel' };
