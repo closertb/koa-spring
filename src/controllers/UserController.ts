@@ -15,18 +15,16 @@ export default class UserController {
       let res;
       try {
         res = await request({
-          uri: `${ssoUrl}/common/web/login.do`,
+          uri: `${ssoUrl}/api/user/login`,
           method: 'POST',
           form: {
-            domainId: 1,
-            appClientId: 279,
             ...user
           }
         });
 
         res = typeof res === 'string' ? JSON.parse(res) : res;
-        // console.log('res status', res.status);
-        if (res.status === "OK") {
+        // console.log('res status', res, res.status);
+        if (res.status === "ok") {
           res = res.content;
           const { id } = res;
           cache.put(id, res, ExpiredTime);

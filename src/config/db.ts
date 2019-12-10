@@ -1,13 +1,13 @@
 import { Sequelize } from 'sequelize-typescript';
 
 const sequelize = new Sequelize({
-  database: 'db_rule',
-  username: 'jruser',
-  password: 'jruser', 
-  host: '10.6.1.52',
+  database: 'McGrady',
+  username: 'root',
+  password: '12345678', 
+  host: '127.0.0.1',
   dialect: 'mysql',
   dialectOptions: {
-    port: 3360
+    port: 3306
   },
   define: {
     freezeTableName: true,

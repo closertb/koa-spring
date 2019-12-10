@@ -28,8 +28,8 @@ const koaApp = createKoaServer({
         UserController
     ],
     validation: true,
-    defaultErrorHandler: false,
-    middlewares: [ResponseMiddleWare, AuthCheckMiddleWare, ErrorHandleInterceptor],
+    defaultErrorHandler: false, // AuthCheckMiddleWare,
+    middlewares: [ResponseMiddleWare, ErrorHandleInterceptor],
     // interceptors: []
 });
 

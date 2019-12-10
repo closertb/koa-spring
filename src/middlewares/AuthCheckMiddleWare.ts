@@ -6,15 +6,15 @@ export default class AuthCheckMiddleWare implements KoaMiddlewareInterface {
     async use(ctx: any, next: any): Promise<any> {
       try {
         const { request: { body = {}, query = {}, path } } = ctx;
-        const { sid, st } = Object.assign({}, query, body);
-        const user = cache.get(sid);
+        const { uid, token } = Object.assign({}, query, body);
+        const user = cache.get(uid);
 
-        if(path === '/user/login' || (user && user.token === st)) {
+        if(path === '/user/login' || (user && user.token === token)) {
           await next();
         } else {
           ctx.body = {
             code: '120001',
-            message: sid ? 'Session过期，请重新登录' : '请先登录',
+            message: uid ? 'Session过期，请重新登录' : '请先登录',
             status: 'fail'
           };
         }

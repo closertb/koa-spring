@@ -21,8 +21,8 @@ export default class RuleController {
     @Get("/query/:id")
     async one(@Param("id") id: number) {
       const res = await this.ruleRepository.findOne(id);
-      console.log('res', res);
-      return res || {};
+      // console.log('res', res);
+      return res;
     }
 
     @Post("/save")

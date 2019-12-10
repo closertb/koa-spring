@@ -10,9 +10,9 @@ export default class User {
   // public param_type: string
   // public is_delete: number
   // public operator_add: string
-  @MinLength(5)
-  username: string;
+  @MinLength(3)
+  name: string;
 
   @MinLength(5)
-  password: string;
+  pwd: string;
 }
