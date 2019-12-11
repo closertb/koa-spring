@@ -7,11 +7,25 @@ export default class Rule extends Model<Rule> {
   scene_code: string;
 
   @Column
+  param_code: string;
+
+  @Column
+  param_name: string;
+
+  @Column
+  param_type: string;
+
+  @Column
   operator_add: string;
 
   @Column
   is_delete!: number;
 
+/*   @Column
+  public get add_time(): number {
+      console.log('format');
+      return new Date(this.getDataValue('add_time')).getTime();
+  } */
   @Column
   add_time!: Date;
 

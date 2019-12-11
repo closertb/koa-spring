@@ -1,19 +1,27 @@
 import { Service } from "typedi";
-import Rule from "../model/Rule";
+import { Op } from 'Sequelize';
+import Rule from "./model";
+import { AnyObject } from '../../config/interface';
 
 @Service()
 export default class RuleRepository {
 
   private rule = Rule;
 
-  findAll() {
+  findAll(rule: AnyObject) {
       // here, for example you can load categories using mongoose
       // you can also return a promise here
       // simulate async with creating an empty promise
+      const { scene_code, ...others } = rule;
       return this.rule.findAll({
         where: {
-          is_delete: 0
-        }
+          is_delete: 0,
+          scene_code: {
+            [Op.like]: `%${scene_code}%`
+          },
+          ...others
+        },
+        // transaction: (data) => data.map(({ dataValues }) => dataValues)
       });
   }
 

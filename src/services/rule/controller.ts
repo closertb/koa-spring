@@ -1,8 +1,9 @@
 import { JsonController, Get, Post, Param, Authorized, Body, UseAfter } from "routing-controllers";
 import { Service } from "typedi";
-import PaginationMiddleWare from '../middlewares/PaginationMiddleWare';
-import RuleRepository from "../repository/RuleRepository";
-import Rule from "../model/Rule";
+import PaginationMiddleWare from '../../middlewares/PaginationMiddleWare';
+import RuleRepository from "./repository";
+import Rule from "./model";
+import { AnyObject } from '../../config/interface';
 
 @Service()
 @JsonController('/rule')
@@ -13,16 +14,23 @@ export default class RuleController {
 
     @Post("/query")
     @UseAfter(PaginationMiddleWare)
-    async all() {
-      const res = await this.ruleRepository.findAll();
+    async all(@Body() body: AnyObject) {
+      const { pn, ps, ...others } = body;
+      const params = Object.keys(others).reduce((pre: AnyObject, cur) => {
+        if (others[cur]) {
+          pre[cur] = others[cur];
+        }
+        return pre;
+      }, {})
+      const res = await this.ruleRepository.findAll(params);
       return res;
     }
 
     @Get("/query/:id")
     async one(@Param("id") id: number) {
       const res = await this.ruleRepository.findOne(id);
-      // console.log('res', res);
-      return res;
+      console.log('res', res);
+      return JSON.parse(JSON.stringify(res));
     }
 
     @Post("/save")

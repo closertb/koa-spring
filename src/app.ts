@@ -1,11 +1,9 @@
 import "reflect-metadata";
 import { createKoaServer, useContainer, Action } from "routing-controllers";
 import { Container } from "typedi";
-import { RuleController, UserController } from "./controllers";
 import { ResponseMiddleWare, LogMiddleWare, AuthCheckMiddleWare, ErrorHandleInterceptor } from "./middlewares";
 import sequelize from './config/db';
-import Rule from './model/Rule';
-import { CLIENT_RENEG_LIMIT } from "tls";
+import Rule from './services/rule/model';
 
 
 /**
@@ -23,17 +21,14 @@ const koaApp = createKoaServer({
      * Here we specify what controllers should be registered in our express server.
      */
     cors: true,
-    controllers: [
-        RuleController,
-        UserController
-    ],
+    controllers: [__dirname+'/services/*/controller.js'],
     validation: true,
     defaultErrorHandler: false, // AuthCheckMiddleWare,
     middlewares: [ResponseMiddleWare, ErrorHandleInterceptor],
     // interceptors: []
 });
 
-sequelize.addModels([Rule]);
+sequelize.addModels([__dirname+'/services/*/model.js']);
 /**  
  * Start the koa app.
  */

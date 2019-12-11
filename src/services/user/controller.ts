@@ -1,9 +1,9 @@
 import { JsonController, Get, Post, Body, UseAfter } from "routing-controllers";
 import * as request from 'request-promise';
 import * as cache from 'memory-cache';
-import User from "../model/User";
-import servers from '../config/servers';
-import { ExpiredTime } from '../config/constants';
+import User from "./selfModel";
+import servers from '../../config/servers';
+import { ExpiredTime } from '../../config/constants';
 
 const ssoUrl = servers['dev'].sso;
 
