@@ -6,7 +6,7 @@ export function validBody(target: object, prop: string, descriptor: AnyObject) {
   return {
     get() {
       return (obj: AnyObject) => {
-        const { pageSize, pageNum, ...others } = obj;
+        const { pn, ps, ...others } = obj;
         return func.call(this, others);
       }
     }
@@ -35,7 +35,7 @@ export function validWithPagination(target: object, prop: string, descriptor: An
   return {
     get() {
       return (obj: AnyObject) => {
-        const { pageSize, pageNum, ...others } = obj;
+        const { pn, ps, ...others } = obj;
         const valid = Object.keys(others).reduce((pre: AnyObject, cur: string) => {
           const value = others[cur] 
           if(value) {
@@ -43,7 +43,7 @@ export function validWithPagination(target: object, prop: string, descriptor: An
           }
           return pre;
         }, {});
-        return func.call(this, valid).then((data: object []) => pagination(data, pageNum, pageSize));
+        return func.call(this, valid).then((data: object []) => pagination(data, pn, ps));
       }
     }
   };
