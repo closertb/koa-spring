@@ -14,7 +14,7 @@ const sequelize = new Sequelize({
     timestamps: false
   },
   query: {
-    raw: true
+    raw: false
   }
   // models: [`${__dirname} + /model`]
 });
