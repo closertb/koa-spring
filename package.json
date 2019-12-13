@@ -1,25 +1,26 @@
 {
-  "name": "routing-controllers-koa-demo",
+  "name": "koa-spring",
   "private": true,
   "version": "0.0.1",
   "description": "Example of koa + typescript project using routing-controllers",
   "license": "MIT",
   "author": {
-    "name": "Umed Khudoiberdiev",
-    "email": "pleerock.me@gmail.com"
+    "name": "doddle",
+    "email": "closertb@163.com"
   },
   "scripts": {
-    "start": "nodemon ./build/app.js",
+    "start": "NODE_ENV=development nodemon ./build/app.js",
     "watch": "tsc -w",
     "build": "node_modules/.bin/tsc",
-    "build:watch": "npm run build -- -w"
+    "build:watch": "npm run build -- -w",
+    "client": "tsc && NODE_ENV=production node ./build/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/pleerock/routing-controllers-koa-demo.git"
+    "url": "git@github.com:closertb/koa-spring.git"
   },
   "bugs": {
-    "url": "https://github.com/pleerock/routing-controllers-koa-demo/issues"
+    "url": "https://github.com/closertb/koa-spring/issues"
   },
   "tags": [
     "koa",

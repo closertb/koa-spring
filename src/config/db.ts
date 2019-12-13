@@ -13,6 +13,9 @@ const sequelize = new Sequelize({
     freezeTableName: true,
     timestamps: false
   },
+  logging: process.env.NODE_ENV === 'development' ? (sql, timing) => {
+    console.log('sql log:', sql);
+  } : false,
   query: {
     raw: false
   }

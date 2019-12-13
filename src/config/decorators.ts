@@ -1,5 +1,5 @@
 import { Model } from 'sequelize-typescript';
-import { AnyObject } from './interface';
+import { AnyObject, Pagination } from './interface';
 
 export function validBody(target: object, prop: string, descriptor: AnyObject) {
   const func = descriptor.value;
@@ -17,7 +17,7 @@ function getValue(data: AnyObject) {
   return data.dataValues;
 }
 
-function pagination(data: object [], pn: number, ps: number) {
+function pagination(data: object [], pn: number, ps: number): Pagination {
   const total = data.length || 0;
   const count = pn * ps;
   let datas = (total > count || total > (pn - 1) * ps) ?
@@ -26,8 +26,8 @@ function pagination(data: object [], pn: number, ps: number) {
   return {
     datas: JSON.parse(JSON.stringify(datas)),
     total,
-    pageNum: (total > count || total > (pn - 1) * ps) ? +pn : 1,
-    pageSize: +ps
+    pn: (total > count || total > (pn - 1) * ps) ? +pn : 1,
+    ps: +ps
   };
 }
 export function validWithPagination(target: object, prop: string, descriptor: AnyObject) {
