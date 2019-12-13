@@ -31,7 +31,7 @@ export default async function RecordMiddleWare(ctx: any, next: (err?: any) => Pr
   const repository = new Model({
     update_id: id,
     update_type,
-    userId: user.appUserId || 'SYS', // 获取userId
+    userId: user.id || 'SYS', // 获取userId
     after: JSON.stringify(nw),
     before: JSON.stringify(old)
   });

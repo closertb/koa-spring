@@ -1,6 +1,6 @@
 import { JsonController, Post, Body } from "routing-controllers";
 import { Service } from "typedi";
-import { AnyObject } from '../../config/global';
+import { AnyObject } from '../../config/interface';
 import Repository from "./repository";
 import Model from "./model";
 
