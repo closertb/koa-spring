@@ -7,6 +7,7 @@ import { AnyObject } from '../config/interface';
  * @param next 
  */
 export default async function RecordMiddleWare(ctx: any, next: (err?: any) => Promise<any>): Promise<any> {
+  console.log("RecordMiddleWare before execution...");
   const { user = {}, body: { before, after, update_type, id } } = ctx;
   const old: AnyObject = {};
   const nw: AnyObject = {}; // 最新数据
@@ -25,9 +26,8 @@ export default async function RecordMiddleWare(ctx: any, next: (err?: any) => Pr
   }
   // 重写body
   ctx.body = { msg: 'success', id };
-  // console.log("LogMiddleWare before execution...", request.query, request.search);
   await next();
-
+  console.log("RecordMiddleWare after execution...");
   const repository = new Model({
     update_id: id,
     update_type,

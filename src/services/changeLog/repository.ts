@@ -1,6 +1,7 @@
 import { Service } from "typedi";
 import Model from "./model";
-import { validWithPagination } from '../../config/decorators';
+import { formatDetail, validBody, validWithPagination } from '../../config/decorators';
+import { AnyObject } from '../../config/interface';
 
 @Service()
 export default class Repository {
@@ -17,17 +18,24 @@ export default class Repository {
   }
 
   findOne(id: number) {
-    // here, for example you can load category id using mongoose
-    // you can also return a promise here
     return this.model.findOne({
       where: {
         id
       }
     });
   }
-
+  @validBody
+  update(body: AnyObject) {
+    const { id, ...others } = body;
+    return this.model.update({
+      ...others,
+    }, {
+      where: {
+        id
+      }
+    });
+  }
   save(body: Model) {
-    
     return body.save();
   }
 }

@@ -21,8 +21,7 @@ export default class RuleController {
     @Get("/query/:id")
     async one(@Param("id") id: number) {
       const res = await this.ruleRepository.findOne(id);
-      console.log('res', res);
-      return JSON.parse(JSON.stringify(res));
+      return res;
     }
 
     @Post("/save")
@@ -31,12 +30,14 @@ export default class RuleController {
       return { msg: 'success' };
     }
 
-    @Post("/update/:id")
+    @Post("/update")
     @UseAfter(RecordMiddleWare)
     async update(@Body() body: AnyObject) {
+      console.log('handle start');
       const { id } = body;
       const before = await this.ruleRepository.findOne(id);
       await this.ruleRepository.update(body);
+      console.log('handle end');  
       return { before, after: body, id, update_type: 'rule' };
     }
 }

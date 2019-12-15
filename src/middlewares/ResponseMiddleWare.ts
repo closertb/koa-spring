@@ -3,7 +3,7 @@ import { Middleware, KoaMiddlewareInterface } from "routing-controllers";
 @Middleware({ type: "after" })
 export default class ResponseMiddleWare implements KoaMiddlewareInterface {
     async use(ctx: any, next: any): Promise<any> {
-      // console.log("ResponseMiddleWare before execution...");
+      console.log("ResponseMiddleWare before execution...");
       try {
         const { body, reqeust } = ctx;
         ctx.body = body.status ? body : {
@@ -25,6 +25,6 @@ export default class ResponseMiddleWare implements KoaMiddlewareInterface {
           }
           // throw error;
       }
-      // console.log("ResponseMiddleWare after execution");
+      console.log("ResponseMiddleWare after execution");
     }
 }

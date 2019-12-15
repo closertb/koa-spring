@@ -24,9 +24,11 @@ export default function() {
         controllers: [__dirname + '/services/*/controller.js'],
         validation: true,  
         defaultErrorHandler: false,
-        middlewares: [ResponseMiddleWare, AuthCheckMiddleWare, ErrorHandleInterceptor],
+        middlewares: [ResponseMiddleWare/* , AuthCheckMiddleWare */, ErrorHandleInterceptor],
         // interceptors: []
     });
+
+    koaApp.use(LogMiddleWare);
 
     // [Models]
     sequelize.addModels([__dirname + '/services/*/model.js']);

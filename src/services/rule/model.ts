@@ -1,5 +1,5 @@
-import { DataTypes } from 'sequelize'
 import { Table, Column, Model } from 'sequelize-typescript';
+import { toTimeStamp } from '../../config/common';
 
 @Table({ tableName: 'rule_param' })
 export default class Rule extends Model<Rule> {
@@ -21,55 +21,12 @@ export default class Rule extends Model<Rule> {
   @Column
   is_delete!: number;
 
-/*   @Column
-  public get add_time(): number {
-      console.log('format');
-      return new Date(this.getDataValue('add_time')).getTime();
-  } */
   @Column
-  add_time!: Date;
-
-  get addTime(): number {
-    return new Date(this.getDataValue('add_time')).getTime();
+  get create_time(): number  {
+    return toTimeStamp(this, 'create_time'); // new Date(this.create_time).toLocaleString()
+  }
+  @Column
+  get update_time(): number  {
+    return toTimeStamp(this, 'update_time'); // new Date(this.create_time).toLocaleString()
   }
 }
-
-// Rule.init({
-//   // attributes
-//   scene_code: {
-//     type: DataTypes.STRING,
-//     allowNull: false
-//   },
-//   param_code: {
-//     type: DataTypes.STRING,
-//     allowNull: false
-//   },
-//   param_name: {
-//     type: DataTypes.STRING,
-//     allowNull: false
-//   },
-//   param_type: {
-//     type: DataTypes.STRING,
-//     allowNull: false
-//   },
-//   is_delete: {
-//     type: DataTypes.NUMBER,
-//     allowNull: false
-//   },
-//   operator_add: {
-//     type: DataTypes.STRING,
-//     allowNull: false
-//   },
-//   id: {
-//     type: DataTypes.NUMBER,
-//     allowNull: false,
-//     autoIncrement: true,
-//     primaryKey: true
-//     // allowNull defaults to true
-//   }
-// }, {
-//   sequelize,
-//   modelName: 'rule_param'
-// });
-
-//  Rule;

@@ -9,6 +9,7 @@ export default class AuthCheckMiddleWare implements KoaMiddlewareInterface {
         const { uid, token } = Object.assign({}, query, body);
         const user = cache.get(uid);
 
+        console.log('uid', uid, '---',token, user);
         if(path === '/user/login' || (user && user.token === token)) {
           if (path !== '/user/login') {
             ctx.user = user; // 赋值到全局User

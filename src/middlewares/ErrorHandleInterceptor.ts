@@ -24,6 +24,7 @@ class BadError extends BadRequestError {
 @Middleware({ type: "before" })
 export default class ErrorHandleInterceptor implements KoaMiddlewareInterface {
     async use(ctx: any, next: any): Promise<any> {
+      console.log("ErrorHandleInterceptor before execution");
       try {
         await next();
       } catch (error) {
@@ -38,6 +39,6 @@ export default class ErrorHandleInterceptor implements KoaMiddlewareInterface {
           }
           // throw error;
       }
-      // console.log("ResponseMiddleWare after execution");
+      console.log("ErrorHandleInterceptor after execution");
     }
 }

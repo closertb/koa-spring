@@ -1,15 +1,6 @@
 import { MinLength, Length } from "class-validator";
 
-
-// import sequelize from './db';
 export default class User {
-  // public id?: number;
-  // public scene_code: string;
-  // public param_code: string
-  // public param_name: string
-  // public param_type: string
-  // public is_delete: number
-  // public operator_add: string
   @MinLength(3)
   name: string;
 

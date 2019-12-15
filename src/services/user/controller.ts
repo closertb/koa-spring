@@ -29,7 +29,6 @@ export default class UserController {
           const { id } = res;
           cache.put(id, res, ExpiredTime);
         } else {
-          console.log('res status', res);
           const { errorMsg, errorCode } = res;
           res = {
             status: 'fail',
@@ -37,9 +36,7 @@ export default class UserController {
             code: errorCode
           }
         }
-        console.log('res', res, user);
       } catch (error) {
-        console.log('res', error);
         res = {
           error,
           message: '网络错误',

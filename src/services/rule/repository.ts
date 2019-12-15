@@ -14,7 +14,7 @@ export default class RuleRepository {
       // here, for example you can load categories using mongoose
       // you can also return a promise here
       // simulate async with creating an empty promise
-      const { scene_code, ...others } = rule;
+      const { scene_code = '', ...others } = rule;
       return this.rule.findAll({
         where: {
           is_delete: 0,

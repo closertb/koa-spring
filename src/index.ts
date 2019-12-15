@@ -52,7 +52,7 @@ function workBeforeExit(server: any, error: Error) {
 //master进程
 if(cluster.isMaster) {
   //fork多个工作进程
-  for(let i = 0; i < cpusNum; i++) {
+  for(let i = 0; i < 1; i++) {
     creatServer();
   }
 } else {

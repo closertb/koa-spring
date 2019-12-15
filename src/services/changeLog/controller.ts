@@ -6,7 +6,7 @@ import Model from "./model";
 
 
 @Service()
-@JsonController('/request')
+@JsonController('/private/log')
 export default class Controller {
 
     constructor(private repository: Repository) {
