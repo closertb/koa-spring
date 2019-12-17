@@ -26,7 +26,7 @@ export default class RuleController {
 
     @Post("/save")
     async save(@Body() rule: Rule) {
-      await this.ruleRepository.save(rule);
+      const res = await this.ruleRepository.save(rule);
       return { msg: 'success' };
     }
 
