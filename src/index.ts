@@ -1,5 +1,8 @@
 import * as cluster from 'cluster';
+import * as cache from 'memory-cache';
 import { cpus } from 'os'; 
+import { ExpiredTime } from './config/constants';
+import { ActionBody } from './config/interface';
 import Server from './app';
 
 const cpusNum = cpus().length;
@@ -8,13 +11,22 @@ const cpusNum = cpus().length;
 //创建服务进程  
 function creatServer() {
   const worker = cluster.fork();
-  console.log(`工作进程已启动，pid: ${worker.process.pid}`);
   //监听message事件，监听自杀信号，如果有子进程发送自杀信号，则立即重启进程。
   //平滑重启 重启在前，自杀在后。
-  worker.on('message', (msg) => {
+  worker.on('message', (msg: ActionBody) => {
+    const { type, payload } = msg;
+    // console.log('type',type,'-----','payload', payload);
     //msg为自杀信号，则重启进程
-    if(msg.act == 'suicide') {
+    if(type == 'suicide') {
       creatServer();
+    }
+    if(type == 'readCache') {
+      const res = cache.get(payload.id) || {};
+      // console.log('get res', res);
+      worker.send({ type: 'sendCache', id: payload.id, payload: res })
+    }
+    if(type == 'saveCache') {
+      cache.put(payload.id, payload, ExpiredTime);
     }
   });
 
@@ -37,7 +49,7 @@ let timeout: any;
 function workBeforeExit(server: any, error: Error) {
   console.log('error', error);
   //发送一个自杀信号
-  process.send({ act: 'suicide' });
+  process.send({ type: 'suicide' });
   cluster.worker.disconnect();
   server.close(() => {
     //所有已有连接断开后，退出进程

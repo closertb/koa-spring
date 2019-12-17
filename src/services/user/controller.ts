@@ -1,9 +1,7 @@
 import { JsonController, Get, Post, Body, UseAfter } from "routing-controllers";
 import * as request from 'request-promise';
-import * as cache from 'memory-cache';
 import User from "./selfModel";
 import servers from '../../config/servers';
-import { ExpiredTime } from '../../config/constants';
 
 const ssoUrl = servers['dev'].sso;
 
@@ -26,8 +24,7 @@ export default class UserController {
         // console.log('res status', res, res.status);
         if (res.status === "ok") {
           res = res.content;
-          const { id } = res;
-          cache.put(id, res, ExpiredTime);
+          process.send({ type: 'saveCache', payload: res });
         } else {
           const { errorMsg, errorCode } = res;
           res = {
