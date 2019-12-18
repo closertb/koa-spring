@@ -14,3 +14,8 @@ export interface ActionBody {
   payload?: AnyObject
   uid?: string
 };
+
+export interface PageParams {
+  limit: number,
+  offset: number,
+}

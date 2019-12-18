@@ -9,11 +9,22 @@ CREATE TABLE `rule_param` (
   `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 正常 1 删除',
   `operator_add` varchar(50) NOT NULL DEFAULT 'SYS',
   `operator_modify` varchar(50) NOT NULL DEFAULT 'SYS',
-  `add_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '添加时间',
-  `modify_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-  PRIMARY KEY (`id`),
-  KEY `idx_scene_param_code` (`scene_code`,`param_code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='参数表';
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '添加时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `related_enums` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+```
+
+### rule_enums表
+```
+CREATE TABLE `rule_enums` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `tag` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `status` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 ```
 ### 日志表
 ```

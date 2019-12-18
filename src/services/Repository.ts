@@ -1,21 +1,29 @@
 import { ModelCtor } from 'sequelize-typescript';
-import { AnyObject } from '../config/interface';
+import { AnyObject, PageParams } from '../config/interface';
 import { validBody, formatDetail, validWithPagination } from '../config/decorators';
 
 export default class Repository {
-  public model: ModelCtor;
+  protected model: ModelCtor;
   constructor(model: ModelCtor) {
     this.model = model;
   }
 
   @validWithPagination
-  findAll(model: object = {}) {
-    return this.model.findAll({
+  async findAll(body: object = {}, pagination: object = {}) {
+    const rows = await this.model.findAll({
       where: {
-          ...model
+          ...body
+      },
+      ...pagination
+    });
+    const count = await this.model.count({
+      where: {
+        ...body
       }
     });
+    return { rows, count }
   }
+
 
   @formatDetail
   findOne(id: number) {

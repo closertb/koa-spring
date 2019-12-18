@@ -3,7 +3,7 @@ import { AnyObject } from '../config/interface';
 import Repository from "./Repository";
 
 export default class Controller {
-    constructor(public repository: Repository) {
+    constructor(protected repository: Repository) {
       this.repository = repository;
     }
 

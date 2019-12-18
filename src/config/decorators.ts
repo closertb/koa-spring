@@ -1,5 +1,10 @@
 import { Model } from 'sequelize-typescript';
-import { AnyObject, Pagination } from './interface';
+import { AnyObject, PageParams, Pagination } from './interface';
+
+interface CountAll {
+  rows: object [];
+  count: number;
+}
 
 export function validBody(target: object, prop: string, descriptor: AnyObject) {
   const func = descriptor.value;
@@ -13,29 +18,28 @@ export function validBody(target: object, prop: string, descriptor: AnyObject) {
   };
 }
 
-function getValue(data: AnyObject) {
-  return data.dataValues;
-}
-
-function pagination(data: object [], pn: number, ps: number): Pagination {
-  const total = data.length || 0;
-  const count = pn * ps;
-  let datas = (total > count || total > (pn - 1) * ps) ?
-    data.slice((pn - 1)*ps, total > count ? ps : undefined) :
-    data.slice(0, ps);
+function pageDecorator({ count, rows }: CountAll, pn: number, ps: number): Pagination {
   return {
-    datas: JSON.parse(JSON.stringify(datas)),
-    total,
-    pn: (total > count || total > (pn - 1) * ps) ? +pn : 1,
-    ps: +ps
+    datas: JSON.parse(JSON.stringify(rows)),
+    total: count,
+    ps,
+    pn
   };
 }
+
+function pagination(ps: number, pn: number): PageParams {
+  return {
+    limit: ps,
+    offset: (pn - 1) * ps
+  }
+}
+// 做了两件事，首先是查询参数筛选掉值为空的属性，其次就是查询分页数据并格式化
 export function validWithPagination(target: object, prop: string, descriptor: AnyObject) {
   const func = descriptor.value;
   return {
     get() {
       return (obj: AnyObject) => {
-        const { pn, ps, ...others } = obj;
+        const { ps, pn, ...others } = obj;
         const valid = Object.keys(others).reduce((pre: AnyObject, cur: string) => {
           const value = others[cur] 
           if(value) {
@@ -43,7 +47,8 @@ export function validWithPagination(target: object, prop: string, descriptor: An
           }
           return pre;
         }, {});
-        return func.call(this, valid).then((data: object []) => pagination(data, pn, ps));
+        const page = pagination(+ps, +pn);
+        return func.call(this, valid, page).then((data: CountAll) => pageDecorator(data, +ps, +pn));
       }
     }
   };

@@ -1,5 +1,6 @@
 import { Table, Column, Model, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { toTimeStamp } from '../../config/common';
+import Enums from '../enums/model';
 
 @Table({ tableName: 'rule_param' })
 export default class Rule extends Model<Rule> {
@@ -21,19 +22,19 @@ export default class Rule extends Model<Rule> {
   @Column
   is_delete!: number;
 
-/*   @ForeignKey(() => Request)
+  @ForeignKey(() => Enums)
   @Column
-  callback_template_id!: string; // 回调模板
+  related_enums: string; // 关联外键值
 
-  @BelongsTo(() => Request)
-  set callback_template_name(val: Request | string)  {
+  @BelongsTo(() => Enums)
+  set scene_name(val: Enums | string)  {
     // 加入了类型断言，val有Null的状态
-    if(val && (<Request>val).getDataValue) {
-      this.setDataValue('callback_template_name', val && (<Request>val).getDataValue('callback_name'));
+    if(val && (<Enums>val).getDataValue) {
+      this.setDataValue('scene_name', val && (<Enums>val).getDataValue('name'));
     } else {
-      this.setDataValue('callback_template_name','');
+      this.setDataValue('scene_name','');
     }
-  } */
+  }
 
   @Column
   get create_time(): number  {
