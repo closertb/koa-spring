@@ -12,5 +12,5 @@ export interface Pagination {
 export interface ActionBody {
   type: string,
   payload?: AnyObject
-  id?: string
+  uid?: string
 };

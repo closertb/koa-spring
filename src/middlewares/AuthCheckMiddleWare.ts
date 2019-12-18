@@ -3,44 +3,55 @@ import { ActionBody } from '../config/interface';
 
 type Callback = (m: ActionBody) => boolean;
 
+function generateUid() {
+  const random = Math.floor(26 * Math.random() + 65);
+  return `${Date.now()}-${String.fromCharCode(random)}`;
+}
+
+// 回调队列
 const callbackList: Array<Callback> = [];
+
 process.on('message', (m: ActionBody = { type: 'sendCache' }) => {
-  const length = callbackList.length;
-  let callback;
-  for(let i = length - 1; i > -1; i--)
-    callback = callbackList[i];
-    if (callback) {
-      let res = callback(m);
-      res && callbackList.pop(); // 成功处理了响应的，才移除这个回调；
+  let tempList = callbackList.slice();
+  tempList.forEach((callback, i) => {
+    callback = tempList[i];
+    if (callback && callback(m)) {
+      callbackList.splice(i, 1); // 成功处理了响应的或则响应已过期，移除这个回调；
     }
+  });
 });
 
 function addCallback(callback: Callback) {
   callbackList.push(callback);
 }
+
 function readCache(id: string) {
   return new Promise((res, rej) => {
     try {
-      let status = false;
-       // 5秒超时读取，防止永久未回调，回调一直存在于回调列表中
-      let timeout = setTimeout(() => {
-        rej({ token: 'time out' });
-        status = true;
-      }, 1000);
-      addCallback((m: ActionBody) => {
-        console.log('get:', m.type, process.pid);
-        if (m.id === id) {
-          clearTimeout(timeout);
+      const uid = generateUid();
+      // console.log('send', _uid, process.pid);
+      addCallback(((uid: string) => {
+        let status = false;
+        let timeout = setTimeout(() => { // 5秒超时读取，防止永久未回调，导致回调一直存在于回调列表中: 可能性很小
+          rej({ message: '授权验证超时' });
+          status = true;
+        }, 5000);
+        return (m: ActionBody) => {
+        // console.log('get:', uid, '===', m.uid, process.pid);
+        // 必须在过期前响应
+        if (!status && m.uid === uid) {
+          clearTimeout(timeout);  
           res(m.payload);
           return true;
         }
         return status;
-      });
-      process.send({ type: 'readCache', payload: { id }});
+      }
+      })(uid));
+      process.send({ type: 'readCache', payload: { id, uid }});
     } catch (error) {
       rej(error);
     }
-  })
+  });
 }
 
 @Middleware({ type: "before" })
@@ -71,9 +82,9 @@ export default class AuthCheckMiddleWare implements KoaMiddlewareInterface {
           ctx.status = 401;
           ctx.body = {
               errors,
-              message: message || '未知错误',
-              status: 'fail',
-              code: '120001',
+              message: message || '未授权错误',
+              status: 'error',
+              code: 120001,
           }
       }
     }

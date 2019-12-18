@@ -7,6 +7,8 @@ import Server from './app';
 
 const cpusNum = cpus().length;
 
+const processNums = cpusNum > 2 ? 2 : cpusNum; // 进程最多开启2个
+
 // master.js
 //创建服务进程  
 function creatServer() {
@@ -21,9 +23,13 @@ function creatServer() {
       creatServer();
     }
     if(type == 'readCache') {
-      const res = cache.get(payload.id) || {};
+      const { uid, id } = payload;
+      const res = cache.get(id) || {};
       // console.log('get res', res);
-      worker.send({ type: 'sendCache', id: payload.id, payload: res })
+      // setTimeout(() => {
+      //   worker.send({ type: 'sendCache', uid, payload: res });
+      // }, 500)
+      worker.send({ type: 'sendCache', uid, payload: res })
     }
     if(type == 'saveCache') {
       cache.put(payload.id, payload, ExpiredTime);
@@ -35,13 +41,6 @@ function creatServer() {
     clearTimeout(timeout);
   });
 }
-
-/**
- * 执行过程: node index.js
- * 首次cluster.isMaster为true, 然后fork了n个进程， 并开启监听；
- * 接着每个启动，又重头执行，但这时cluster.isMaster为false了
- * 所以就实例化了四个服务AngelServer
- */
 
 //超时
 let timeout: any;
@@ -60,11 +59,19 @@ function workBeforeExit(server: any, error: Error) {
     process.exit(1);
   },5000);
 }
+
+/**
+ * 执行过程: node index.js
+ * 首次cluster.isMaster为true, 然后fork了n个进程， 并开启监听；
+ * 接着每个启动，又重头执行，但这时cluster.isMaster为false了
+ * 所以就实例化了四个服务AngelServer
+**/
+
 // console.log('start', cluster.isWorker, cluster.isMaster ? 'master' : 'fork');
 //master进程
 if(cluster.isMaster) {
   //fork多个工作进程
-  for(let i = 0; i < 1; i++) {
+  for(let i = 0; i < processNums; i++) {
     creatServer();
   }
 } else {
