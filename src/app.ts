@@ -24,7 +24,7 @@ export default function() {
         controllers: [__dirname + '/services/*/controller.js'],
         validation: true,  
         defaultErrorHandler: false,
-        middlewares: [ResponseMiddleWare/* , AuthCheckMiddleWare */, ErrorHandleInterceptor],
+        middlewares: [ResponseMiddleWare, AuthCheckMiddleWare, ErrorHandleInterceptor],
         // interceptors: []
     });
 
