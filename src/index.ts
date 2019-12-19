@@ -25,10 +25,6 @@ function creatServer() {
     if(type == 'readCache') {
       const { uid, id } = payload;
       const res = cache.get(id) || {};
-      // console.log('get res', res);
-      // setTimeout(() => {
-      //   worker.send({ type: 'sendCache', uid, payload: res });
-      // }, 500)
       worker.send({ type: 'sendCache', uid, payload: res })
     }
     if(type == 'saveCache') {
