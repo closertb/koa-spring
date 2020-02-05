@@ -60,11 +60,11 @@ export default class AuthCheckMiddleWare implements KoaMiddlewareInterface {
       try {
         const { request: { body = {}, query = {}, path } } = ctx;
         const { uid, token } = Object.assign({}, query, body);
-
         if(path === '/user/login') {
           await next();
         } else {
           const user: any = await readCache(uid);
+          console.log('ans', uid, user, user.token === token);
           if(user && user.token === token) {
               ctx.user = user;
               await next();

@@ -29,7 +29,7 @@ export default class ErrorHandleInterceptor implements KoaMiddlewareInterface {
         await next();
       } catch (error) {
           const { errors, message } = error;
-          // console.log('error', errors, message);
+          console.log('error', errors, message);
           ctx.status = 200;
           ctx.body = {
               errors,

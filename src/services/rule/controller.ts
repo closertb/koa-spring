@@ -8,7 +8,7 @@ import { AnyObject } from '../../config/interface';
 
 @Service()
 @JsonController('/rule')
-export default class Ruletroller extends Controller{
+export default class Ruletroller extends Controller {
   constructor(public repository: Repository) {
     super(repository)
   }
