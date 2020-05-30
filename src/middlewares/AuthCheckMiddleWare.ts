@@ -60,7 +60,8 @@ export default class AuthCheckMiddleWare implements KoaMiddlewareInterface {
       try {
         const { request: { body = {}, query = {}, path } } = ctx;
         const { uid, token } = Object.assign({}, query, body);
-        if(path === '/user/login') {
+        console.log('path', path);
+        if(path === '/user/login' || path === '/arcticle/graphql' ) {
           await next();
         } else {
           const user: any = await readCache(uid);

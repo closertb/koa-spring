@@ -5,7 +5,12 @@ export default class ResponseMiddleWare implements KoaMiddlewareInterface {
     async use(ctx: any, next: any): Promise<any> {
       console.log("ResponseMiddleWare before execution...");
       try {
-        const { body, reqeust } = ctx;
+        const { body = {} } = ctx;
+        if (body.nobody) {
+          console.log('end');
+          ctx.body = body.stream; 
+          return;
+        }  
         ctx.body = body.status ? body : {
           content: body,
           code: 200,

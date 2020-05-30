@@ -1,3 +1,9 @@
+import * as crypto from 'crypto';
+
+export function calHash(obj: {} = {}) {
+  return crypto.createHash('md5').update(JSON.stringify(obj)).digest('hex');
+}
+
 /**
  * Date对象转时间戳
  * @param target：model 实例 
