@@ -28,7 +28,7 @@
     "routing-controllers"
   ],
   "dependencies": {
-    "class-transformer": "^0.2.3",
+    "class-transformer": "^0.3.1",
     "class-validator": "^0.8.5",
     "jsonwebtoken": "^8.5.1",
     "kcors": "^2.2.2",
